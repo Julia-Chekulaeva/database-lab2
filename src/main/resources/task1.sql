@@ -1,0 +1,67 @@
+DROP TABLE IF EXISTS visitors CASCADE;
+DROP TABLE IF EXISTS addresses CASCADE;
+DROP TABLE IF EXISTS waiters CASCADE;
+DROP TABLE IF EXISTS halls CASCADE;
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS event_orders CASCADE;
+
+CREATE TABLE visitors(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(20) NOT NULL,
+	surname VARCHAR(20) NOT NULL,
+	patronymic VARCHAR(20) NOT NULL,
+	phone DECIMAL(11, 0) NOT NULL
+);
+
+CREATE TABLE addresses(
+	id SERIAL PRIMARY KEY,
+	street VARCHAR(50) NOT NULL,
+	building INTEGER NOT NULL
+);
+
+CREATE TABLE waiters(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(20) NOT NULL,
+	surname VARCHAR(20) NOT NULL,
+	patronymic VARCHAR(20) NOT NULL,
+	address_id INTEGER NOT NULL,
+	FOREIGN KEY (address_id) REFERENCES addresses (id)
+);
+
+CREATE TABLE halls(
+	id SERIAL PRIMARY KEY,
+	hall_num INTEGER NOT NULL,
+	address_id INTEGER NOT NULL,
+	FOREIGN KEY (address_id) REFERENCES addresses (id),
+	tables_count INTEGER NOT NULL
+);
+
+CREATE TABLE events(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(40) NOT NULL,
+	price INTEGER NOT NULL,
+	show_time TIME NOT NULL
+);
+
+CREATE TABLE bookings(
+	id SERIAL PRIMARY KEY,
+	booking_date DATE NOT NULL,
+	time_start TIME NOT NULL,
+	time_end TIME NOT NULL,
+	visitor_id INTEGER NOT NULL,
+	FOREIGN KEY (visitor_id) REFERENCES visitors (id),
+	hall_id INTEGER NOT NULL,
+	FOREIGN KEY (hall_id) REFERENCES halls (id),
+	full_hall BOOL NOT NULL,
+	table_num INTEGER NOT NULL
+);
+
+CREATE TABLE event_orders(
+	id SERIAL PRIMARY KEY,
+	event_id INTEGER NOT NULL,
+	FOREIGN KEY (event_id) REFERENCES events (id),
+	start_time TIME NOT NULL,
+	booking_id INTEGER NOT NULL,
+	FOREIGN KEY (booking_id) REFERENCES bookings (id)
+);
