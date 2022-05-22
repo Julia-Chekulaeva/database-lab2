@@ -14,7 +14,9 @@ const val eventOrdersCount = 10000
 val namesMen = File("src\\main\\resources\\names_men.txt").readLines().map { it.split(" ") }
 val namesWomen = File("src\\main\\resources\\names_women.txt").readLines().map { it.split(" ") }
 val sqlCreation = File("src\\main\\resources\\task1.sql").readText()
+val streets = File("src\\main\\resources\\streets.txt").readLines()
 val outputFile = File("src\\main\\resources\\task2_generated.sql").bufferedWriter()
+
 val bookings = mutableListOf<Booking>()
 val tablesInHalls = mutableListOf<Int>()
 val hallsOnAddresses = Array(addressesCount) { 0 }
@@ -74,7 +76,7 @@ private fun insertData(connection: Connection) {
     for (i in 0 until addressesCount)
         insertInto(
             "addresses", listOf("street", "building"),
-            listOf("VARCHAR" to listOf(50), "INTEGER" to listOf(1, 99)),
+            listOf("street" to listOf(), "INTEGER" to listOf(1, 99)),
             connection
         )
     println("Inserting data into waiters")
@@ -127,6 +129,7 @@ private fun generateRandomData(params: List<Pair<String, List<Int>>>) = params.m
         "name" -> generateNameSurnamePatronymic(0, it.second[0] > 0)
         "surname" -> generateNameSurnamePatronymic(1, it.second[0] > 0)
         "patronymic" -> generateNameSurnamePatronymic(2, it.second[0] > 0)
+        "street" -> generateStreet()
         "VARCHAR" -> generateStr(it.second[0], false)
         "INTEGER" -> generateIntegerIncludingStartAndEnd(it.second[0], it.second[1])
         "phone" -> generatePhone()
@@ -272,3 +275,6 @@ private fun generateNameSurnamePatronymic(num: Int, genderMan: Boolean) = if (ge
         "'${namesMen[generateIntegerIncludingStartAndEnd(0, namesMen.lastIndex)][num]}'"
     else
         "'${namesWomen[generateIntegerIncludingStartAndEnd(0, namesWomen.lastIndex)][num]}'"
+
+private fun generateStreet() =
+    "'${streets[generateIntegerIncludingStartAndEnd(0, streets.lastIndex)]}'"
