@@ -126,8 +126,8 @@ private fun generateInsertion(
 
 private fun generateRandomData(params: List<Pair<String, List<Int>>>) = params.map {
     when (it.first) {
-        "name" -> generateNameSurnamePatronymic(0, it.second[0] > 0)
-        "surname" -> generateNameSurnamePatronymic(1, it.second[0] > 0)
+        "name" -> generateNameSurnamePatronymic(1, it.second[0] > 0)
+        "surname" -> generateNameSurnamePatronymic(0, it.second[0] > 0)
         "patronymic" -> generateNameSurnamePatronymic(2, it.second[0] > 0)
         "street" -> generateStreet()
         "VARCHAR" -> generateStr(it.second[0], false)
